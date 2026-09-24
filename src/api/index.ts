@@ -140,14 +140,15 @@ const INITIAL_DEMO_CREDENTIALS: CredentialItem[] = [
 ];
 
 // Helper to get local data
-const getLocalCredentials = (): CredentialItem[] => {
-  const data = localStorage.getItem(LOCAL_CREDENTIALS_KEY);
-  if (!data) {
-    localStorage.setItem(LOCAL_CREDENTIALS_KEY, JSON.stringify(INITIAL_DEMO_CREDENTIALS));
-    return INITIAL_DEMO_CREDENTIALS;
-  }
-  try {
-    return JSON.parse(data);
+const getLocalCredentials = async (): Promise<CredentialItem[]> => {
+  const data = await apiClient.get('your-endpoint').getItem(LOCAL_CREDENTIALS_KEY);
+  // if (!data) {
+  //   localStorage.setItem(LOCAL_CREDENTIALS_KEY, JSON.stringify(INITIAL_DEMO_CREDENTIALS));
+  //   return INITIAL_DEMO_CREDENTIALS;
+  // }
+   try {
+    const response = await apiClient.get('/credentials');
+    return response.data;
   } catch {
     return INITIAL_DEMO_CREDENTIALS;
   }
